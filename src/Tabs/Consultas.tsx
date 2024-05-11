@@ -1,11 +1,47 @@
-import { VStack, Text } from 'native-base';
+import { VStack, Divider, ScrollView } from 'native-base'
+import { ButtonX } from '../components/ButtonX'
+import { CardConsulta } from '../components/CardConsulta'
+import { Title } from '../components/Title'
 
-const Consultas = () => {
-    return (
-        <VStack style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Consultas</Text>
-        </VStack>
-    );
-};
+export default function Consultas(){
+  return(
+    <ScrollView p="5">
+      <Title color="blue.500">Minhas consultas</Title>
+      <ButtonX mt={5} mb={5}>Agendar nova consulta</ButtonX>
 
-export default Consultas;
+      <Title color="blue.500" fontSize="lg" alignSelf="flex-start" mb={2}>Próximas consultas</Title>
+      <CardConsulta 
+        nome='Dr. Andre'
+        especialidade='Cardiologista'
+        foto='https://github.com/andreocunha.png'
+        data='20/04/2023'
+        foiAgendado
+      />
+
+      <Divider mt={5} />
+
+      <Title color="blue.500" fontSize="lg" alignSelf="flex-start" mb={2}>Consultas passadas</Title>
+      <CardConsulta 
+        nome='Dr. Andre'
+        especialidade='Cardiologista'
+        foto='https://github.com/andreocunha.png'
+        data='20/04/2023'
+        foiAtendido
+      />
+      <CardConsulta 
+        nome='Dr. Andre'
+        especialidade='Cardiologista'
+        foto='https://github.com/andreocunha.png'
+        data='20/04/2023'
+        foiAtendido
+      />
+      <CardConsulta 
+        nome='Dr. Andre'
+        especialidade='Cardiologista'
+        foto='https://github.com/andreocunha.png'
+        data='20/04/2023'
+        foiAtendido
+      />
+    </ScrollView>
+  )
+}

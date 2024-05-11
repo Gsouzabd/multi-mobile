@@ -5,9 +5,11 @@ interface InputTextProps extends ITextProps {
     label: ReactNode,
     placeholder: string
     secureTextEntry?: boolean
+    value?: string
+    onChangeText?: (text: string) => void;
 }
 
-export function InputText({label, placeholder, secureTextEntry, ...rest}: InputTextProps){
+export function InputText({label, placeholder, secureTextEntry, value, onChangeText, ...rest}: InputTextProps){
     return (
         <FormControl mt={3}>
 
@@ -23,6 +25,8 @@ export function InputText({label, placeholder, secureTextEntry, ...rest}: InputT
                 borderRadius={"lg"} 
                 bgColor={"gray.100"}
                 {...rest}
+                value={value}
+                onChangeText={onChangeText}
             />
         </FormControl>
     )

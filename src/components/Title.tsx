@@ -11,10 +11,9 @@ export function Title({children, ...rest}: TitleProps){
             fontSize="xl"
             fontWeight="bold"
             color="gray.500"
-            textAlign="center"
             marginTop="5"
             {...rest}
-        >
+            >
             {children}
         </Text>
     )
