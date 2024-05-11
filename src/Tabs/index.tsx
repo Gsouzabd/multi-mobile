@@ -38,6 +38,7 @@ const Screens = [
 export default function Tabs() {
     return (
        <Tab.Navigator
+            detachInactiveScreens={false}
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: "#002851"

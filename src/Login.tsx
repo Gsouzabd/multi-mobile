@@ -18,12 +18,10 @@ export default function Login({navigation}) {
 
   useEffect(() => {
     async function verifyLogin() {
-      AsyncStorage.removeItem('token')
-
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          // navigation.replace('Tabs');
+          navigation.navigate('Tabs');
         }
       } catch (error) {
         console.error('Error verifying login:', error);
@@ -59,7 +57,7 @@ export default function Login({navigation}) {
           const pacienteId = decoded.id;
             
           AsyncStorage.setItem('pacienteId', pacienteId);
-          navigation.replace('Tabs')
+          navigation.navigate('Tabs')
         }
       }else{
         toast.show({
@@ -100,6 +98,7 @@ export default function Login({navigation}) {
 
       <Button 
         onPress={login}
+          backgroundColor={'#0B3B60'}
           mt={10} 
           borderRadius={"lg"} 
           width="100%"

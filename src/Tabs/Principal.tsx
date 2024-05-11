@@ -3,7 +3,6 @@ import { FlatList, VStack, Box, Text, Divider } from 'native-base';
 import { Title } from '../components/Title';
 import Search from '../components/Search';
 import { depoimentos } from '../utils/Depoimentos';
-import { CardTitle } from '../components/CardTitle';
 import { SectionTitle } from '../components/SectionTitle';
 
 const Principal = () => {
@@ -13,11 +12,13 @@ const Principal = () => {
       keyExtractor={(item) => item.id.toString()}
       ListHeaderComponent={
         <VStack
-          style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}
+          style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}
         >
           <SectionTitle key="section-title">Boas vindas, Gabriel!</SectionTitle>
+
           <Search key="search" />
-          <Title key="title" color="blue.800" mb={5}>
+
+          <Title key="title" color="blue.800" >
             Depoimentos
           </Title>
         </VStack>
