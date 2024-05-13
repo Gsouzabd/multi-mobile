@@ -1,24 +1,85 @@
-import { VStack, Image, Text, Box, FormControl, Input, Button, Link, Checkbox, ScrollView } from "native-base";
-import Logo from "./assets/Logo.png";
-import { TouchableOpacity } from "react-native";
+import {Text, Box, Button, Checkbox, ScrollView, useToast } from "native-base";
 import { Title } from "./components/Title";
 import { InputText } from "./components/InputText";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import "core-js/stable/atob";
+import { jwtDecode } from "jwt-decode";
+
 
 import { cadastroSections } from "./utils/CadastroSections";
+import { createPaciente } from "./services/PacienteService";
 
-export default function Cadastro() {
+
+export default function Cadastro({navigation}) {
+  const toast = useToast();
+
   const [numSection, setNumSection] = useState(0);
+  const [data, setData] = useState({} as any);
+  const [planos, setPlanos] = useState([]);
+
+
+  async function doCreatePaciente(data) {
+    try {
+      const result = await createPaciente(data);
+      console.log(result)
+      if(result){      
+        if(result === null) {
+          toast.show({
+            title: "Erro no cadastro",
+            description: "Dados inválidos. Verifique os campos preenchidos.",
+            backgroundColor: "red.500"
+          })
+        } else {
+          if(result.estaAtivo) navigation.navigate('Tabs')
+        }
+      }else{
+        toast.show({
+          title: "Erro no cadastro",
+          description: "Dados inválidos. Verifique os campos preenchidos.",
+          backgroundColor: "red.500"
+        })
+      }
+    } catch (error) {
+      console.error('Erro durante o cadastro:', error);
+    }
+  }
+
 
   function nextSection(){
     if(numSection < cadastroSections.length - 1){
+      const currentSection = cadastroSections[numSection];
+      const inputTextFields = currentSection.InputText || [];
+      
+      const isEmpty = inputTextFields.some((input) => {
+        return !data[input.name] || data[input.name].trim() === '';
+      });
+
+      if(isEmpty){
+        return toast.show({
+          title: "Erro no cadastro",
+          description: "Preencha todos os campos da seção",
+          backgroundColor: "red.500"
+        })
+      }
+
       setNumSection(numSection+1);
+    }else{
+      data['planosSaude'] = planos;
+      doCreatePaciente(data)
     }
   }
+  
+  
   function previousSection(){
     if(numSection > 0){
       setNumSection(numSection-1);
     }
+  }
+
+
+  function updateData(name: string, value: string){
+    setData({...data, [name]: value})
   }
 
 
@@ -38,6 +99,8 @@ export default function Cadastro() {
                       placeholder={input.placeholder} 
                       key={input.id} 
                       secureTextEntry={input.secureTextEntry}
+                      value={data[input.name]}
+                      onChangeText={(value) => updateData(input.name, value)}
                       />
           })
         }
@@ -45,12 +108,26 @@ export default function Cadastro() {
       <Box>
         {cadastroSections[numSection].Checkbox &&
           cadastroSections[numSection].Checkbox.map(checkbox => {
-            return <Checkbox key={checkbox.id} value={checkbox.value} mt={3}>
+            return <Checkbox 
+                      key={checkbox.id} 
+                      value={checkbox.name} 
+                      mt={3}
+                      onChange={() => {
+                        setPlanos((planosExistentes) =>{
+                          if(planosExistentes.includes(checkbox.id)){
+                            return planosExistentes.filter((id) => {id != checkbox.id});
+                          }
+                          return [...planosExistentes, checkbox.id];                      
+                        })
+                      }}
+                      isChecked={planos.includes(checkbox.id)}
+                      >
                       <Text color={"gray.600"}>{checkbox.value}</Text>
                     </Checkbox>
           })
         }
       </Box>
+      
       {numSection > 0 && <Button onPress={() => previousSection()} 
         backgroundColor={"gray.300"} 
         mt={10} 

@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 
 
 export default function Login({navigation}) {
+  const toast = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,15 +33,12 @@ export default function Login({navigation}) {
     verifyLogin();
   }, []);
 
-  const toast = useToast();
 
   async function login() {
     try{
       const result = await doLogin(email, password)
 
-      if(result){
-        console.log(result)
-      
+      if(result){      
         if(result === null) {
           toast.show({
             title: "Erro no login",
