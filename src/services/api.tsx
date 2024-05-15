@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://192.168.1.139:3000';
+const SERVER_URL = 'http://192.168.2.188:3000';
 
 const api = {
 

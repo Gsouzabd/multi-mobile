@@ -1,22 +1,24 @@
+import { Paciente } from "../Interfaces/Paciente";
 import api from "./api";
 
-export async function createPaciente(data){
-
-    data.estaAtivo = true;
-
-    data.endereco = {
-        "cep": data.cep,
-        "rua": data.rua,
-        "numero": data.numero,
-        "complemento": data.complemento,
-        "estado": data.estado
-    }
-
+export async function createPaciente(paciente: Paciente){
     try {
-        const result = await api.post('/paciente', data)
+        const result = await api.post('/paciente', paciente)
         return result;
     } catch (error) {
         console.error(error);
         return null;
     }
+}
+
+
+export async function getPaciente(id: string) {
+    try {
+        const result = await api.get(`/paciente/${id}`);
+        return result;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+    
 }

@@ -19,10 +19,26 @@ export default function Cadastro({navigation}) {
   const [planos, setPlanos] = useState([]);
 
 
-  async function doCreatePaciente(data) {
+  async function cadastrar(data) {
     try {
-      const result = await createPaciente(data);
-      console.log(result)
+      const result = await createPaciente({
+        cpf: data.cpf,
+        nome: data.nome,
+        email: data.email,
+        endereco: {
+            cep: data.cep,
+            rua: data.rua,
+            numero: data.numero,
+            complemento: data.complemento,
+            estado: data.estado
+        },
+        senha: data.senha,
+        telefone: data.telefone,
+        possuiPlanoSaude: planos.length > 0,
+        planosSaude: data.planosSaude,
+        imagem: data.imagem
+      });
+    
       if(result){      
         if(result === null) {
           toast.show({
@@ -31,7 +47,7 @@ export default function Cadastro({navigation}) {
             backgroundColor: "red.500"
           })
         } else {
-          if(result.estaAtivo) navigation.navigate('Tabs')
+          if(result.estaAtivo) navigation.navigate('Login')
         }
       }else{
         toast.show({
@@ -66,7 +82,7 @@ export default function Cadastro({navigation}) {
       setNumSection(numSection+1);
     }else{
       data['planosSaude'] = planos;
-      doCreatePaciente(data)
+      cadastrar(data)
     }
   }
   
@@ -142,7 +158,9 @@ export default function Cadastro({navigation}) {
         mb={10}
         borderRadius={"lg"}
         width="100%">
-          <Text fontWeight={600} color={"white"}>Avançar</Text>
+          <Text fontWeight={600} color={"white"}>
+          {numSection == 2 ? "Finalizar" : "Avançar"} 
+          </Text>
       </Button>
 
     </ScrollView>
