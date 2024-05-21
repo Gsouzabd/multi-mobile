@@ -20,6 +20,8 @@ export default function Login({navigation}) {
   useEffect(() => {
     async function verifyLogin() {
       try {
+        //  AsyncStorage.removeItem('token');
+
         const token = await AsyncStorage.getItem('token');
         if (token) {
           navigation.navigate('Tabs');

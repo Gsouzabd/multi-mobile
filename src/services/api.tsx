@@ -1,10 +1,16 @@
-const SERVER_URL = 'http://192.168.2.188:3000';
+const SERVER_URL = 'http://192.168.2.194:3000';
 
 const api = {
 
   async get(endpoint) {
     const url = `${SERVER_URL}${endpoint}`;
-    const response = await fetch(url);
+    console.log(url);
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
     return await response.json();
   },
 

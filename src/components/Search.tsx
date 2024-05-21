@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Button, Overlay } from 'react-native-elements';
+
 import { Box, Select, CheckIcon } from 'native-base';
-import SelectDropdown from 'react-native-select-dropdown';
+import { getEspecialistaBy } from '../services/EspecialistaService';
 
 const especialidades = [
     { id: 1, label: 'Cardiologia', value: 'cardiologia' },
@@ -12,11 +14,9 @@ const especialidades = [
 ];
 
 const localizacoes = [
-    { id: 1, label: 'Recife - PE', value: 'recife' },
-    { id: 2, label: 'São Paulo - SP', value: 'sao_paulo' },
-    { id: 3, label: 'Rio de Janeiro - RJ', value: 'rio_de_janeiro' },
-    { id: 4, label: 'Salvador - BA', value: 'salvador' },
-    { id: 5, label: 'Brasília - DF', value: 'brasilia' },
+    { id: 1, label: 'Pernambuco', value: 'Pernambuco' },
+    { id: 2, label: 'São Paulo', value: 'São Paulo' },
+    { id: 3, label: 'Rio de Janeiro', value: 'Rio de Janeiro' },
 ];
 
 
@@ -24,13 +24,54 @@ const Search = () => {
     const [valorEspecialidade, setValorEspecialidade] = useState('');
     const [valorLocalizacao, setValorLocalizacao] = useState('');
 
-    const handleBuscar = () => {
-        alert('Buscar com:'+ valorEspecialidade +" em: "+ valorLocalizacao);
-    };
+    const [modalVisible, setModalVisible] = useState(false);
+    const [especialistas, setEspecialistas] = useState([]);
+
+    async function pesquisarEspecialistas() {
+        try {
+            const result = await getEspecialistaBy([
+                { key: 'especialidade', value: valorEspecialidade },
+                { key: 'estado', value: valorLocalizacao }
+            ]);
+            if (result !== null) {
+                setEspecialistas(result);
+                setModalVisible(true);
+            } else {
+                setEspecialistas([]);
+                setModalVisible(true);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const closeModal = () => {
+        setModalVisible(false);
+    }
 
     return (
-        <View style={styles.container}>
 
+        <View style={styles.container}>
+            {/* Modal */}
+            { modalVisible && (
+                <Overlay isVisible={modalVisible}>
+                    <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>{especialistas.length > 0 ? 'Especialistas encontrados:' : 'Nenhum especialista encontrado.'}</Text>
+                        {especialistas.map((especialista) => (
+                        <Text key={especialista.id} style={styles.modalText}>
+                            Nome: {especialista.nome},{"\n"}
+                            Especialidade: {especialista.especialidade},{"\n"}
+                        </Text>
+                        ))}
+                        <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                        <Text style={styles.closeButtonText}>Fechar</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
+                </Overlay>
+            )}
             <Box w={'50%'} p={5} 
                 style={{
                     shadowColor: '#000',
@@ -70,7 +111,7 @@ const Search = () => {
                     ))}
                 </Select>
 
-                <TouchableOpacity style={styles.button} onPress={handleBuscar}>
+                <TouchableOpacity style={styles.button} onPress={pesquisarEspecialistas}>
                     <Text 
                         style={
                             { color: 'white', textAlign: 'center', fontWeight: "700", fontSize: 16 }
@@ -78,6 +119,7 @@ const Search = () => {
                             Buscar
                     </Text>
                 </TouchableOpacity>
+
 
             </Box>
 
@@ -113,7 +155,42 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         gap: 0,
         borderLeftWidth: 0,
-    }
+    },
+
+      modalContainer: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',  
+        zIndex: 1000,
+      },
+      modalContent: {
+        width: '100%',
+        alignItems: 'center',
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 15,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 10,
+        textAlign: 'left',
+      },
+      closeButton: {
+        marginTop: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#2196F3',
+        borderRadius: 5,
+      },
+      closeButtonText: {
+        color: 'white',
+        fontSize: 16,
+      },
 });
 
 export default Search;

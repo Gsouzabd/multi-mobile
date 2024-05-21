@@ -23,6 +23,9 @@ const Perfil = () => {
         }
         getDadosPaciente();
     }, []);
+    if (!paciente || paciente == undefined || !paciente.email) {
+        return <Text>Loading...</Text>;
+    }
 
 
     console.log(paciente)
