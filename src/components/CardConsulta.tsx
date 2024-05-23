@@ -24,7 +24,7 @@ export function CardConsulta({
         <Avatar size="lg" source={{ uri: foto }} />
         <VStack pl="4">
           <Text fontSize="md" bold>{nome}</Text>
-          <Text>{especialidade}</Text>
+          <Text fontSize="md">{especialidade}</Text>
           <Text>{data}</Text>
         </VStack>
       </VStack>

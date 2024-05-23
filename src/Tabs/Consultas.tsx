@@ -6,7 +6,7 @@ import { Title } from '../components/Title'
 export default function Consultas(){
   return(
     <ScrollView p="5">
-      <Title color="blue.500">Minhas consultas</Title>
+      <Title color="blue.500" pt={5}>Minhas consultas</Title>
       <ButtonX mt={5} mb={5}>Agendar nova consulta</ButtonX>
 
       <Title color="blue.500" fontSize="lg" alignSelf="flex-start" mb={2}>Próximas consultas</Title>

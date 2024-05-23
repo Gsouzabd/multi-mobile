@@ -4,6 +4,7 @@ import { Button, Overlay } from 'react-native-elements';
 
 import { Box, Select, CheckIcon } from 'native-base';
 import { getEspecialistaBy } from '../services/EspecialistaService';
+import { CardConsulta } from './CardConsulta';
 
 const especialidades = [
     { id: 1, label: 'Cardiologia', value: 'cardiologia' },
@@ -18,7 +19,6 @@ const localizacoes = [
     { id: 2, label: 'São Paulo', value: 'São Paulo' },
     { id: 3, label: 'Rio de Janeiro', value: 'Rio de Janeiro' },
 ];
-
 
 const Search = () => {
     const [valorEspecialidade, setValorEspecialidade] = useState('');
@@ -52,23 +52,24 @@ const Search = () => {
 
     return (
 
-        <View style={styles.container}>
+        <View style={styles.container} >
             {/* Modal */}
             { modalVisible && (
-                <Overlay isVisible={modalVisible}>
+                <Overlay isVisible={modalVisible} overlayStyle={{ width: '90%', borderRadius: 20 }} >
                     <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>{especialistas.length > 0 ? 'Especialistas encontrados:' : 'Nenhum especialista encontrado.'}</Text>
                         {especialistas.map((especialista) => (
-                        <Text key={especialista.id} style={styles.modalText}>
-                            Nome: {especialista.nome},{"\n"}
-                            Especialidade: {especialista.especialidade},{"\n"}
-                        </Text>
+                            <Box w={'100%'} p={0} key={especialista.id}>
+                                <CardConsulta
+                                    nome={especialista.nome}
+                                    especialidade={especialista.especialidade}
+                                    foto={especialista.imagem}
+                                />
+                            </Box>
                         ))}
                         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-                        <Text style={styles.closeButtonText}>Fechar</Text>
+                            <Text style={styles.closeButtonText}>Fechar</Text>
                         </TouchableOpacity>
-                    </View>
                     </View>
                 </Overlay>
             )}
@@ -129,11 +130,11 @@ const Search = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 50,
-        marginRight: 50
+        // flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // marginLeft: 50,
+        // marginRight: 50
     },
     button: {
         width: 280,
@@ -161,19 +162,16 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 20,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',  
         zIndex: 1000,
-      },
-      modalContent: {
-        width: '100%',
-        alignItems: 'center',
+        margin: 0
       },
       modalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 15,
+        marginBottom: 40,
       },
       modalText: {
         fontSize: 16,

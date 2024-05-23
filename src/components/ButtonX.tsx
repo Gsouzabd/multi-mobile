@@ -1,5 +1,5 @@
 
-import { Button, IButtonProps } from 'native-base';
+import { Button, IButtonProps, Text } from 'native-base';
 import { ReactNode } from "react";
 
 interface ButtonProps extends IButtonProps {
@@ -11,11 +11,13 @@ interface ButtonProps extends IButtonProps {
 export function ButtonX({ children, autoSize = false, color, ...rest }: ButtonProps){
   return (
     <Button
-      w={autoSize ? 'auto' : '100%'}
       bg={color || 'blue.800'}
       mt={10}
       borderRadius="lg"
       _text={{ color: 'white' }}
+      textAlign={'center'}
+      justifyContent={'center'}
+      alignItems={'center'}
       {...rest}
     >
       {children}

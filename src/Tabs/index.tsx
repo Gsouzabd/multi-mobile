@@ -44,7 +44,9 @@ export default function Tabs() {
                     backgroundColor: "#002851"
                 },
                 tabBarActiveTintColor: "#339cff",
-                tabBarInactiveTintColor: "white" 
+                tabBarInactiveTintColor: "white" ,
+                tabBarLabelStyle: { fontSize: 14 } // Adicione esta linha
+
             }}>
         
             {Screens.map((screen) => {
