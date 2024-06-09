@@ -4,8 +4,31 @@ import { Title } from '../components/Title';
 import Search from '../components/Search';
 import { depoimentos } from '../utils/Depoimentos';
 import { SectionTitle } from '../components/SectionTitle';
+import { useState, useEffect } from 'react';
+import { Paciente } from '../Interfaces/Paciente';
+import { getPaciente } from '../services/PacienteService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Principal = () => {
+
+  const [paciente, setPaciente] = useState({} as Paciente);
+
+  useEffect(() => {
+      async function getDadosPaciente() {
+          const pacienteId = await AsyncStorage.getItem('pacienteId')
+          const result = await getPaciente(pacienteId);
+          console.log(result)
+
+          if(result){
+              setPaciente(result);
+          }
+      }
+      getDadosPaciente();
+  }, []);
+  if (!paciente || paciente == undefined || !paciente.email) {
+      return <Text>Loading...</Text>;
+  }
+  
   return (
     <FlatList
       data={depoimentos}
@@ -14,7 +37,7 @@ const Principal = () => {
         <VStack
           style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}
         >
-          <SectionTitle key="section-title">Boas vindas, Gabriel!</SectionTitle>
+          <SectionTitle key="section-title">Boas vindas, {paciente.nome}</SectionTitle>
 
           <Search key="search" />
 

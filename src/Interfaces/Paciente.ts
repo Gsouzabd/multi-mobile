@@ -1,19 +1,20 @@
 export interface Paciente {
-    cpf: string;
     nome: string;
+    cpf: string;
     email: string;
-    endereco: Endereco;
-    senha: string;
-    telefone: string;
-    possuiPlanoSaude: boolean;
-    planosSaude?: number[];
-    imagem: string;
-}
+    password: string;
 
-export interface Endereco {
+    data_nascimento: string;
+    sexo: string;
+    // foto: string;
     cep: string;
-    rua: string;
+    endereco: string;
     numero: string;
     complemento?: string;
+    bairro?: string;
+    cidade: string;
     estado: string;
+    celular: string;
+    pais?: string;
+    convenios: string[];
 }

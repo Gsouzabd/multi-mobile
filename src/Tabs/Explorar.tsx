@@ -8,6 +8,7 @@ const Explorar = () => {
             <Title color={'blue.500'} mb={5}>
                 Buscar especialistas
             </Title>
+            
             <Search/>
             
         </VStack>

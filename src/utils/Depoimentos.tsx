@@ -11,7 +11,7 @@ const depoimentos = [
     },
     {
         id: 3,
-        texto: "Integer ultricies ligula eget neque commodo, ac blandit erat laoreet. Duis at eros ac velit commodo euismod. In hac habitasse platea dictumst. Phasellus fermentum fermentum est at consequat. Nullam in justo quis sapien fringilla volutpat. Pellentesque efficitur neque nec risus venenatis, nec vestibulum elit venenatis.",
+        texto: "Integer ultricies ligula eget neque commodo, ac blandit erat laoreet. Duis at eros ac velit commodo euismod. In hac habitasse platea dictumst. Phasellus fermentum fermentum est at consequat. Nullam in justo quis sApien fringilla volutpat. Pellentesque efficitur neque nec risus venenatis, nec vestibulum elit venenatis.",
         autor: "Pedro, 45 anos, Brasília/DF"
     }
 ];

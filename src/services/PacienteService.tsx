@@ -1,9 +1,11 @@
 import { Paciente } from "../Interfaces/Paciente";
-import api from "./api";
+import Api from "./Api";
 
 export async function createPaciente(paciente: Paciente){
+    console.log(paciente)
     try {
-        const result = await api.post('/paciente', paciente)
+        const result = await Api.post('/pacientes', paciente)
+        console.log(result)
         return result;
     } catch (error) {
         console.error(error);
@@ -14,7 +16,7 @@ export async function createPaciente(paciente: Paciente){
 
 export async function getPaciente(id: string) {
     try {
-        const result = await api.get(`/paciente/${id}`);
+        const result = await Api.get(`/pacientes/${id}`);
         return result;
     } catch (error) {
         console.error(error);
@@ -22,3 +24,5 @@ export async function getPaciente(id: string) {
     }
     
 }
+
+ 

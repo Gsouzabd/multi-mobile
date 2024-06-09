@@ -38,8 +38,10 @@ export default function Login({navigation}) {
 
   async function login() {
     try{
-      const result = await doLogin(email, password)
+      console.log('tentando verificar login')
 
+      const result = await doLogin(email, password)
+      console.log(result)
       if(result){      
         if(result === null) {
           toast.show({
@@ -48,14 +50,11 @@ export default function Login({navigation}) {
             backgroundColor: "red.500"
           })
         } else {
-          const {token} = result
+          const token = result.token
           AsyncStorage.setItem('token', token);
           console.log(token)
-          const decoded = jwtDecode(token) as any;
-          console.log(decoded)
 
-          const pacienteId = decoded.id;
-            
+          const pacienteId = JSON.stringify(result.user_id); 
           AsyncStorage.setItem('pacienteId', pacienteId);
           navigation.navigate('Tabs')
         }

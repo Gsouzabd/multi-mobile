@@ -2,18 +2,17 @@ import {Text, Box, Button, Checkbox, ScrollView, useToast } from "native-base";
 import { Title } from "./components/Title";
 import { InputText } from "./components/InputText";
 import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import "core-js/stable/atob";
-import { jwtDecode } from "jwt-decode";
 
 
-import { cadastroSections } from "./utils/CadastroSections";
+import { CadastroSections } from "./utils/CadastroSections";
 import { createPaciente } from "./services/PacienteService";
 
 
 export default function Cadastro({navigation}) {
   const toast = useToast();
-
+  const cadastroSections = CadastroSections()
   const [numSection, setNumSection] = useState(0);
   const [data, setData] = useState({} as any);
   const [planos, setPlanos] = useState([]);
@@ -21,22 +20,25 @@ export default function Cadastro({navigation}) {
 
   async function cadastrar(data) {
     try {
+      let date = data.dataNascimento;
+      let [day, month, year] = date.split('/');
+      let newDate = `${year}/${month}/${day}`;
+
       const result = await createPaciente({
         cpf: data.cpf,
         nome: data.nome,
         email: data.email,
-        endereco: {
-            cep: data.cep,
-            rua: data.rua,
-            numero: data.numero,
-            complemento: data.complemento,
-            estado: data.estado
-        },
-        senha: data.senha,
-        telefone: data.telefone,
-        possuiPlanoSaude: planos.length > 0,
-        planosSaude: data.planosSaude,
-        imagem: data.imagem
+        password: data.senha,
+        data_nascimento: newDate,
+        sexo: data.sexo,
+        celular: data.telefone,
+        cep: data.cep,
+        endereco: data.rua,
+        numero: data.numero,
+        complemento: data.complemento,
+        cidade: data.cidade,
+        estado: data.estado,
+        convenios: data.planosSaude  
       });
     
       if(result){      
@@ -47,7 +49,12 @@ export default function Cadastro({navigation}) {
             backgroundColor: "red.500"
           })
         } else {
-          if(result.estaAtivo) navigation.navigate('Login')
+          if(result.created_at) navigation.navigate('Login')
+            toast.show({
+              title: "Cadastro realizado com sucesso!",
+              description: "Relize o login para acessar o sistema.",
+              backgroundColor: "green.500"
+            })
         }
       }else{
         toast.show({
@@ -110,14 +117,18 @@ export default function Cadastro({navigation}) {
       <Box>
         {cadastroSections[numSection].InputText &&
           cadastroSections[numSection].InputText.map(input => {
-            return <InputText 
-                      label={input.label} 
-                      placeholder={input.placeholder} 
-                      key={input.id} 
-                      secureTextEntry={input.secureTextEntry}
-                      value={data[input.name]}
-                      onChangeText={(value) => updateData(input.name, value)}
-                      />
+              return (
+                <InputText 
+                  label={input.label} 
+                  placeholder={input.placeholder} 
+                  key={input.id} 
+                  date={input.date}
+                  secureTextEntry={input.secureTextEntry}
+                  value={data[input.name]}
+                  onChangeText={(value) => updateData(input.name, value)}
+                />
+              );
+            
           })
         }
       </Box>

@@ -1,15 +1,15 @@
-import api from "./api";
+import Api from "./Api";
 
 export async function doLogin(email: string, password: string) {
-    if (!email || !password) return null;
+    if (!email || !password) return null; 
     
     const payload = {
         "email": email,
-        "senha": password
+        "password": password
     };
 
     try {
-        const result = await api.post('/auth/login', payload)
+        const result = await Api.post('/autenticacao', payload)
 
         return result;
     } catch (error) {

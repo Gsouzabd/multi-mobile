@@ -1,4 +1,4 @@
-import api from "./api";
+import Api from "./Api";
 
 export async function getEspecialistaBy(filters: Array<any>) {
     const query = filters.map(filter => {
@@ -9,7 +9,7 @@ export async function getEspecialistaBy(filters: Array<any>) {
         const query = filters.map(filter => {
             return `${encodeURIComponent(filter.key)}=${encodeURIComponent(filter.value)}`;
           }).join('&');
-          const result = await api.get(`/especialista/busca?${query}`);
+          const result = await Api.get(`/especialista/busca?${query}`);
           console.log(result)
 
         return result;

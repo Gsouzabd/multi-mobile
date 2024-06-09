@@ -62,6 +62,7 @@ const Search = () => {
                             <Box w={'100%'} p={0} key={especialista.id}>
                                 <CardConsulta
                                     nome={especialista.nome}
+                                    especialistaId={especialista.id}
                                     especialidade={especialista.especialidade}
                                     foto={especialista.imagem}
                                 />
