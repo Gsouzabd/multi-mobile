@@ -1,43 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Button, Overlay } from 'react-native-elements';
 
 import { Box, Select, CheckIcon } from 'native-base';
-import { getEspecialistaBy } from '../services/EspecialistaService';
 import { CardConsulta } from './CardConsulta';
 
-const especialidades = [
-    { id: 1, label: 'Cardiologia', value: 'cardiologia' },
-    { id: 2, label: 'Dermatologia', value: 'dermatologia' },
-    { id: 3, label: 'Ginecologia', value: 'ginecologia' },
-    { id: 4, label: 'Ortopedia', value: 'ortopedia' },
-    { id: 5, label: 'Pediatria', value: 'pediatria' },
-];
+import { getAllEspecialidades, getEspecialidadeEspecialistas } from '../services/EspecialidadeService';
 
-const localizacoes = [
-    { id: 1, label: 'Pernambuco', value: 'Pernambuco' },
-    { id: 2, label: 'São Paulo', value: 'São Paulo' },
-    { id: 3, label: 'Rio de Janeiro', value: 'Rio de Janeiro' },
-];
+// const localizacoes = [
+//     { id: 1, label: 'Pernambuco', value: 'Pernambuco' },
+//     { id: 2, label: 'São Paulo', value: 'São Paulo' },
+//     { id: 3, label: 'Rio de Janeiro', value: 'Rio de Janeiro' },
+// ];
 
 const Search = () => {
     const [valorEspecialidade, setValorEspecialidade] = useState('');
-    const [valorLocalizacao, setValorLocalizacao] = useState('');
+    // const [valorLocalizacao, setValorLocalizacao] = useState('');
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [especialistas, setEspecialistas] = useState([]);
+    const [especialidadesEspecialistas, setEspecialidadesEspecialistas] = useState({} as Especialidade);
+    const [especialidades, setEspecialidades] = useState([]);
+
+    useEffect(() => {
+        async function getEspecialidades() {
+            try {
+                const result = await getAllEspecialidades();
+                console.log(result)
+                setEspecialidades(result);
+            } catch (error) {
+                console.error(error);
+            }
+            
+        }
+        getEspecialidades()
+        console.log(especialidades)
+
+    }, []);
 
     async function pesquisarEspecialistas() {
         try {
-            const result = await getEspecialistaBy([
-                { key: 'especialidade', value: valorEspecialidade },
-                { key: 'estado', value: valorLocalizacao }
-            ]);
+            const result = await getEspecialidadeEspecialistas(valorEspecialidade);
             if (result !== null) {
-                setEspecialistas(result);
+                setEspecialidadesEspecialistas(result);
                 setModalVisible(true);
             } else {
-                setEspecialistas([]);
+                setEspecialidadesEspecialistas([]);
                 setModalVisible(true);
             }
 
@@ -57,14 +64,15 @@ const Search = () => {
             { modalVisible && (
                 <Overlay isVisible={modalVisible} overlayStyle={{ width: '90%', borderRadius: 20 }} >
                     <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>{especialistas.length > 0 ? 'Especialistas encontrados:' : 'Nenhum especialista encontrado.'}</Text>
-                        {especialistas.map((especialista) => (
+                        <Text style={styles.modalTitle}>{especialidadesEspecialistas.especialistas ? 'Especialistas encontrados:' : 'Nenhum especialista encontrado.'}</Text>
+                        {especialidadesEspecialistas.especialistas.map((especialista) => (
                             <Box w={'100%'} p={0} key={especialista.id}>
                                 <CardConsulta
                                     nome={especialista.nome}
-                                    especialistaId={especialista.id}
-                                    especialidade={especialista.especialidade}
-                                    foto={especialista.imagem}
+                                    especialistaId={especialidadesEspecialistas.id}
+                                    especialidade={especialidadesEspecialistas.nome}
+                                    sexo={especialista.sexo}
+                                    foto={especialista.foto}
                                 />
                             </Box>
                         ))}
@@ -94,10 +102,10 @@ const Search = () => {
                     }}
                     onValueChange={valorEspecialidade => setValorEspecialidade(valorEspecialidade)}>
                     {especialidades.map(especialidade => (
-                        <Select.Item key={especialidade.id} value={especialidade.value} label={especialidade.label}/>
+                        <Select.Item key={especialidade.id} value={especialidade.id} label={especialidade.nome}/>
                     ))}
                 </Select>
-
+{/* 
                 <Select
                     marginBottom={5}
                     style={styles.select}
@@ -111,7 +119,7 @@ const Search = () => {
                     {localizacoes.map(localizacao => (
                         <Select.Item key={localizacao.id} value={localizacao.value} label={localizacao.label}/>
                     ))}
-                </Select>
+                </Select> */}
 
                 <TouchableOpacity style={styles.button} onPress={pesquisarEspecialistas}>
                     <Text 

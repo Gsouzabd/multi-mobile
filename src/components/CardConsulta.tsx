@@ -10,9 +10,10 @@ import { Title } from './Title';
 
 interface CardProps {
   nome: string;
-  especialistaId: string;
+  especialistaId: string | number;
   foto: string;
   especialidade: string;
+  sexo?: string;
   data?: string;
   foiAtendido?: boolean;
   foiAgendado?: boolean;
@@ -22,6 +23,7 @@ export function CardConsulta({
   nome,
   especialistaId,
   foto, 
+  sexo,
   data,
   especialidade,
   foiAgendado,
@@ -112,7 +114,8 @@ return (
                     data: date.toISOString().split('T')[0],
                     hora: time.toTimeString().split(' ')[0].slice(0, 5),
                     especialista: nome,
-                    foto: foto, foiAtendido: false, foiAgendado: true
+                    foto: (sexo == 'F' ? 'https://www.w3schools.com/w3images/avatar6.png' : 'https://www.w3schools.com/w3images/avatar2.png'),
+                    foiAtendido: false, foiAgendado: true
                   }
                 )
 
@@ -128,7 +131,7 @@ return (
       </Overlay>
     )} 
       <VStack flexDir="row">
-        <Avatar size="lg" source={{ uri: foto }} />
+        <Avatar size="lg" source={{ uri: (sexo == 'F' ? 'https://www.w3schools.com/w3images/avatar6.png' : 'https://www.w3schools.com/w3images/avatar2.png') }} />
         <VStack pl="4">
           <Text fontSize="md" bold>{nome}</Text>
           <Text fontSize="md">{especialidade}</Text>
