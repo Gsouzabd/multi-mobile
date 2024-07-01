@@ -8,7 +8,7 @@ interface TitleProps extends ITextProps {
 export function Title({children, ...rest}: TitleProps){
     return (
         <Text 
-            fontSize="xl"
+            fontSize="md"
             fontWeight="bold"
             color="gray.500"
             marginTop="5"

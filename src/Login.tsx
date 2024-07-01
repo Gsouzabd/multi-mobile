@@ -8,11 +8,13 @@ import { doLogin } from "./services/AuthenticationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "core-js/stable/atob";
 import { jwtDecode } from "jwt-decode";
+import { STORAGE_URL, getConfigurations } from "./services/ConfigurationService";
 
 
 export default function Login({navigation}) {
   const toast = useToast();
 
+  const [config, setConfig] = useState({} as any);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(true);
@@ -28,11 +30,19 @@ export default function Login({navigation}) {
         }
       } catch (error) {
         console.error('Error verifying login:', error);
-      } finally {
-        setLoading(false);
       }
     }
+    async function getConfigs() {
+      const result = await getConfigurations();
+      if(result){
+          setConfig(result);
+          setLoading(false);
+      }
+    }
+
     verifyLogin();
+    getConfigs();
+
   }, []);
 
 
@@ -43,7 +53,7 @@ export default function Login({navigation}) {
       const result = await doLogin(email, password)
       console.log(result)
       if(result){      
-        if(result === null) {
+        if(result === null || result === undefined) {
           toast.show({
             title: "Erro no login",
             description: "O email ou senha não conferem",
@@ -71,11 +81,13 @@ export default function Login({navigation}) {
   }
 
   if(loading) return null;
-
   return (
     <VStack flex={1} alignItems="center" justifyContent="center" p={5}>
-      {/* <Image source={Logo} alt="Logo" width="40%" height="10%"/> */}
-
+      <Image 
+        source={{ uri: STORAGE_URL + config.logo }} 
+        style={{ width: '50%', height: 100 }} 
+        alt="logo"
+      />
       <Title>Faça seu login</Title>
 
       <Box>

@@ -11,6 +11,8 @@ import { Title } from './Title';
 interface CardProps {
   nome: string;
   especialistaId: string | number;
+  unidadeId: string | number;
+  especialidadeId: string | number;
   foto: string;
   especialidade: string;
   sexo?: string;
@@ -23,6 +25,8 @@ export function CardConsulta({
   nome,
   especialistaId,
   foto, 
+  especialidadeId,
+  unidadeId,
   sexo,
   data,
   especialidade,
@@ -57,9 +61,11 @@ export function CardConsulta({
     const pacienteId = await AsyncStorage.getItem('pacienteId')
     try{
       createConsulta({
-        data: new Date(`${dados.data}T${dados.hora}:00`),
-        especialistaId: especialistaId,
-        pacienteId : pacienteId,
+        dataHora: new Date(`${dados.data}T${dados.hora}:00`),
+        id_funcionario: especialistaId,
+        unidadeId: unidadeId,
+        id_paciente : pacienteId,
+        id_especialidade : especialidadeId
       })
     }catch(error){
       console.error(error)

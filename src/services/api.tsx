@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://192.168.1.139:8989/api';
+const SERVER_URL = 'http://192.168.0.9:8989/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Api = {

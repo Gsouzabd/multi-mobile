@@ -11,9 +11,10 @@ export async function getAllEspecialidades() {
 }
 
 
-export async function getEspecialidadeEspecialistas(especialidadeId: string) {
+export async function getEspecialidadeEspecialistas(especialidadeId: string, unidadeId: string) {
+    console.log(unidadeId)
     try {
-        const result = await Api.get(`/especialidades/${especialidadeId}/especialistas`);
+        const result = await Api.get(`/especialidades/${especialidadeId}/especialistas/${unidadeId}`);
         return result;
     } catch (error) {
         console.error(error);

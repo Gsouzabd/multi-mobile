@@ -1,5 +1,7 @@
 export interface Consulta{
-    data: Date,
-    especialistaId: string,
-    pacienteId: string,
+    dataHora: Date,
+    id_funcionario: string | number,
+    id_especialidade: string | number,
+    unidadeId: string | number,
+    id_paciente: string,
 }

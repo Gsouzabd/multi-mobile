@@ -6,6 +6,7 @@ import { Box, Select, CheckIcon } from 'native-base';
 import { CardConsulta } from './CardConsulta';
 
 import { getAllEspecialidades, getEspecialidadeEspecialistas } from '../services/EspecialidadeService';
+import { getAllunidades } from '../services/UnidadeService';
 
 // const localizacoes = [
 //     { id: 1, label: 'Pernambuco', value: 'Pernambuco' },
@@ -15,36 +16,47 @@ import { getAllEspecialidades, getEspecialidadeEspecialistas } from '../services
 
 const Search = () => {
     const [valorEspecialidade, setValorEspecialidade] = useState('');
-    // const [valorLocalizacao, setValorLocalizacao] = useState('');
+    const [valorUnidade, setValorUnidade] = useState('');
 
     const [modalVisible, setModalVisible] = useState(false);
     const [especialidadesEspecialistas, setEspecialidadesEspecialistas] = useState({} as Especialidade);
     const [especialidades, setEspecialidades] = useState([]);
+    const [unidades, setUnidades] = useState([]);
 
     useEffect(() => {
         async function getEspecialidades() {
             try {
                 const result = await getAllEspecialidades();
-                console.log(result)
+                // console.log(result)
                 setEspecialidades(result);
             } catch (error) {
                 console.error(error);
             }
             
         }
-        getEspecialidades()
-        console.log(especialidades)
 
+        async function getUnidades() {
+            try {
+                const result = await getAllunidades();
+                // console.log(result)
+                setUnidades(result);
+            } catch (error) {
+                console.error(error);
+            }
+            
+        }
+        getEspecialidades();
+        getUnidades();
     }, []);
 
     async function pesquisarEspecialistas() {
         try {
-            const result = await getEspecialidadeEspecialistas(valorEspecialidade);
+            const result = await getEspecialidadeEspecialistas(valorEspecialidade, valorUnidade);
             if (result !== null) {
                 setEspecialidadesEspecialistas(result);
                 setModalVisible(true);
             } else {
-                setEspecialidadesEspecialistas([]);
+                setEspecialidadesEspecialistas(null);
                 setModalVisible(true);
             }
 
@@ -65,17 +77,19 @@ const Search = () => {
                 <Overlay isVisible={modalVisible} overlayStyle={{ width: '90%', borderRadius: 20 }} >
                     <View style={styles.modalContainer}>
                         <Text style={styles.modalTitle}>{especialidadesEspecialistas.especialistas ? 'Especialistas encontrados:' : 'Nenhum especialista encontrado.'}</Text>
-                        {especialidadesEspecialistas.especialistas.map((especialista) => (
+                        {especialidadesEspecialistas.especialistas  ? especialidadesEspecialistas.especialistas.map((especialista) => (
                             <Box w={'100%'} p={0} key={especialista.id}>
                                 <CardConsulta
                                     nome={especialista.nome}
-                                    especialistaId={especialidadesEspecialistas.id}
+                                    especialistaId={especialista.id}
                                     especialidade={especialidadesEspecialistas.nome}
+                                    especialidadeId={valorEspecialidade}
+                                    unidadeId={valorUnidade}
                                     sexo={especialista.sexo}
                                     foto={especialista.foto}
                                 />
                             </Box>
-                        ))}
+                        )): null}
                         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                             <Text style={styles.closeButtonText}>Fechar</Text>
                         </TouchableOpacity>
@@ -103,6 +117,21 @@ const Search = () => {
                     onValueChange={valorEspecialidade => setValorEspecialidade(valorEspecialidade)}>
                     {especialidades.map(especialidade => (
                         <Select.Item key={especialidade.id} value={especialidade.id} label={especialidade.nome}/>
+                    ))}
+                </Select>
+
+                <Select
+                    marginBottom={5}
+                    style={styles.select}
+                    accessibilityLabel="Escolha a Unidade"
+                    placeholder="Escolha a unidade"
+                    _selectedItem={{
+                        bg: "teal.600",
+                        endIcon: <CheckIcon size="5" />
+                    }}
+                    onValueChange={valorUnidade => setValorUnidade(valorUnidade)}>
+                    {unidades.map(unidade => (
+                        <Select.Item key={unidade.id} value={unidade.id} label={unidade.nome}/>
                     ))}
                 </Select>
 {/* 
